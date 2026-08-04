@@ -1,0 +1,16 @@
+{
+  "name": "majdy-portfolio",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "dev": "npx netlify dev",
+    "build": "echo 'Static site - no build needed'",
+    "deploy": "npx netlify deploy --prod"
+  },
+  "dependencies": {
+    "nodemailer": "^6.9.14"
+  },
+  "devDependencies": {
+    "netlify-cli": "^17.0.0"
+  }
+}

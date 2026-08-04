@@ -1,0 +1,1835 @@
+<!DOCTYPE html>
+<html class="dark" lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <title>Archangel - Brand & UI/UX Specialist</title>
+  <link rel="icon" type="image/x-icon" href="favicon.ico">
+  <link rel="icon" type="image/png" sizes="32x32" href="assets/favicon.png">
+  <link rel="apple-touch-icon" href="assets/favicon.png">
+  <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,600;0,700;1,400;1,600&family=Manrope:wght@400;500;600&display=swap"
+    rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap"
+    rel="stylesheet">
+  <script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          "colors": {
+            "background": "#0b0a1f",
+            "surface": "#0b0a1f",
+            "on-surface": "#f0eefb",
+            "on-surface-variant": "#c5c0e8",
+            "primary": "#c4a3ff",
+            "primary-container": "#a855f7",
+            "surface-container": "#1d1840",
+            "surface-container-high": "#241f44",
+            "outline": "#9aa4d8",
+            "accent-glow": "rgba(168, 85, 247, 0.45)"
+          },
+          "fontFamily": {
+            "display": ["Plus Jakarta Sans", "sans-serif"],
+            "body": ["Manrope", "sans-serif"]
+          }
+        },
+      },
+    }
+  </script>
+  <style>
+    body {
+      position: relative;
+      background-color: #0b0a1f;
+      color: #f0eefb;
+      font-family: 'Manrope', sans-serif;
+      min-height: 100vh;
+    }
+
+    /* Ambient sprite background */
+    #sprite-bg {
+      position: fixed;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 0;
+      opacity: 0.55;
+      mix-blend-mode: screen;
+      pointer-events: none;
+      filter: saturate(1.15) contrast(1.1) brightness(1.03);
+    }
+
+    /* Deep atmospheric overlay */
+    #bg-glow {
+      position: fixed;
+      inset: 0;
+      z-index: 1;
+      pointer-events: none;
+      background:
+        radial-gradient(80% 60% at 50% 20%, rgba(168, 85, 247, 0.12), transparent 55%),
+        radial-gradient(60% 50% at 20% 80%, rgba(138, 92, 246, 0), transparent 65%),
+        radial-gradient(70% 60% at 80% 70%, rgba(91, 31, 176, 0.08), transparent 55%),
+        linear-gradient(180deg, rgba(11, 10, 31, 0.65) 0%, rgba(7, 6, 20, 0) 100%);
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    main {
+      position: relative;
+      z-index: 2;
+    }
+
+    nav .nav-link {
+      position: relative;
+      color: inherit;
+      transition: color 0.25s ease, transform 0.25s ease;
+    }
+
+    nav .nav-link::after {
+      content: "";
+      position: absolute;
+      left: 50%;
+      bottom: -4px;
+      width: 0;
+      height: 2px;
+      background: #c4a3ff;
+      border-radius: 9999px;
+      transform: translateX(-50%);
+      transition: width 0.25s ease;
+    }
+
+    nav .nav-link:hover {
+      color: #c4a3ff;
+      transform: translateY(-1px);
+    }
+
+    nav .nav-link:hover::after {
+      width: calc(100% + 10px);
+    }
+
+    /* Glassmorphic Cards */
+    .verdant-glass {
+      position: relative;
+      background: rgba(29, 24, 64, 0.45);
+      border: 1px solid rgba(255, 255, 255, 0.027);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border-radius: 1.25rem;
+      transition: all 0.4s cubic-bezier(.16, 1, .3, 1);
+    }
+
+    .verdant-glass:hover {
+      border-color: rgba(197, 163, 255, 0.121);
+      background: rgba(36, 31, 68, 0.65);
+      box-shadow: 0 12px 40px rgba(0, 0, 0, 0.4), 0 0 20px rgba(168, 85, 247, 0.15);
+    }
+
+    /* ============================================
+     3D GLASS BUTTON SYSTEM
+  ============================================ */
+    @keyframes btn-shimmer {
+      0% {
+        background-position: 200% center;
+      }
+
+      100% {
+        background-position: -200% center;
+      }
+    }
+
+    @keyframes btn-ring-pulse {
+
+      0%,
+      100% {
+        outline-color: rgba(196, 163, 255, 0);
+        outline-offset: 0px;
+      }
+
+      50% {
+        outline-color: rgba(196, 163, 255, 0.38);
+        outline-offset: 4px;
+      }
+    }
+
+    @keyframes ghost-shimmer {
+      0% {
+        background-position: 200% center;
+      }
+
+      100% {
+        background-position: -200% center;
+      }
+    }
+
+    /* Primary 3D glass button */
+    .btn-3d {
+      position: relative;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.45rem;
+      background: linear-gradient(110deg,
+          #7c3aed 0%,
+          #a855f7 20%,
+          #c4a3ff 40%,
+          #e9d5ff 50%,
+          #c4a3ff 60%,
+          #a855f7 80%,
+          #7c3aed 100%);
+      background-size: 240% 100%;
+      box-shadow:
+        0 0 0 1px rgba(196, 163, 255, 0.28),
+        0 2px 6px rgba(0, 0, 0, 0.55),
+        0 8px 24px rgba(168, 85, 247, 0.52),
+        0 18px 44px rgba(168, 85, 247, 0.2),
+        inset 0 1.5px 0 rgba(255, 255, 255, 0.32),
+        inset 0 -2px 0 rgba(0, 0, 0, 0.22);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      transform: perspective(700px) translateZ(0px);
+      transform-style: preserve-3d;
+      outline: 1.5px solid transparent;
+      outline-offset: 0px;
+      transition:
+        transform 0.22s cubic-bezier(.16, 1, .3, 1),
+        box-shadow 0.22s ease,
+        filter 0.22s ease;
+      animation:
+        btn-shimmer 12s linear infinite,
+        btn-ring-pulse 5s ease-in-out infinite;
+      cursor: pointer;
+      color: #0b0a1f;
+      font-weight: 700;
+      text-decoration: none;
+      will-change: transform;
+    }
+
+    .btn-3d:hover {
+      box-shadow:
+        0 0 0 1px rgba(196, 163, 255, 0.48),
+        0 4px 10px rgba(0, 0, 0, 0.55),
+        0 14px 36px rgba(168, 85, 247, 0.74),
+        0 26px 52px rgba(168, 85, 247, 0.3),
+        inset 0 1.5px 0 rgba(255, 255, 255, 0.42),
+        inset 0 -2px 0 rgba(0, 0, 0, 0.22);
+      transform: perspective(700px) translateZ(14px) translateY(-3px);
+      filter: brightness(1.08) saturate(1.18);
+      animation-duration: 8s, 5s;
+    }
+
+    .btn-3d:active {
+      transform: perspective(700px) translateZ(4px) translateY(-1px) scale(0.97);
+      box-shadow:
+        0 0 0 1px rgba(196, 163, 255, 0.3),
+        0 2px 6px rgba(0, 0, 0, 0.5),
+        0 6px 18px rgba(168, 85, 247, 0.46),
+        inset 0 1px 0 rgba(255, 255, 255, 0.22),
+        inset 0 -1px 0 rgba(0, 0, 0, 0.2);
+    }
+
+    /* Ghost / outline 3D variant */
+    .btn-3d-ghost {
+      position: relative;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.45rem;
+      background: linear-gradient(110deg,
+          rgba(196, 163, 255, 0.04) 0%,
+          rgba(196, 163, 255, 0.10) 25%,
+          rgba(243, 232, 255, 0.20) 50%,
+          rgba(196, 163, 255, 0.10) 75%,
+          rgba(196, 163, 255, 0.04) 100%);
+      background-size: 240% 100%;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      backdrop-filter: blur(18px);
+      -webkit-backdrop-filter: blur(18px);
+      box-shadow:
+        0 2px 8px rgba(0, 0, 0, 0.38),
+        0 8px 20px rgba(0, 0, 0, 0.16),
+        inset 0 1px 0 rgba(255, 255, 255, 0.13);
+      transform: perspective(700px) translateZ(0px);
+      transform-style: preserve-3d;
+      transition:
+        transform 0.22s cubic-bezier(.16, 1, .3, 1),
+        box-shadow 0.22s ease,
+        border-color 0.22s ease,
+        color 0.22s ease,
+        filter 0.22s ease;
+      animation: ghost-shimmer 14s linear infinite;
+      cursor: pointer;
+      color: #f0eefb;
+      font-weight: 600;
+      text-decoration: none;
+      will-change: transform;
+    }
+
+    .btn-3d-ghost:hover {
+      border-color: rgba(196, 163, 255, 0.44);
+      box-shadow:
+        0 4px 12px rgba(0, 0, 0, 0.4),
+        0 12px 28px rgba(168, 85, 247, 0.2),
+        inset 0 1px 0 rgba(255, 255, 255, 0.2),
+        0 0 0 1px rgba(196, 163, 255, 0.2);
+      transform: perspective(700px) translateZ(7px) translateY(-2px);
+      color: #c4a3ff;
+      filter: brightness(1.06);
+      animation-duration: 9s;
+    }
+
+    .btn-3d-ghost:active {
+      transform: perspective(700px) translateZ(2px) scale(0.98);
+    }
+
+    /* Legacy alias kept for backward-compat */
+    .btn-glow-pill {
+      background: linear-gradient(135deg, #c4a3ff 0%, #a855f7 100%);
+      box-shadow: 0 0 25px rgba(168, 85, 247, 0.5);
+      transition: all 0.3s ease;
+    }
+
+    .btn-glow-pill:hover {
+      box-shadow: 0 0 35px rgba(168, 85, 247, 0.75);
+      transform: translateY(-2px);
+    }
+
+    /* Glass Badge */
+    .glass-badge {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      backdrop-filter: blur(8px);
+    }
+
+    /* ============================================
+     HERO ENTRANCE
+  ============================================ */
+    @keyframes hero-entrance {
+      from {
+        opacity: 0;
+        transform: translateY(10px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    #about {
+      animation: hero-entrance 0.95s cubic-bezier(.8, 1, .3, 1) both;
+    }
+
+    /* ============================================
+     SECTION REVEAL + FRAME SYNC
+  ============================================ */
+    .section-reveal {
+      opacity: 0;
+      transform: translateY(28px);
+      transition:
+        opacity 0.78s cubic-bezier(.16, 1, .3, 1),
+        transform 0.78s cubic-bezier(.16, 1, .3, 1);
+      will-change: opacity, transform;
+    }
+
+    .section-reveal.revealed {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* Stagger grid cards inside a revealed section */
+    .section-reveal .grid>.verdant-glass {
+      opacity: 0;
+      transform: translateY(20px) scale(0.983);
+      transition: opacity 0.52s ease, transform 0.52s ease;
+      will-change: opacity, transform;
+    }
+
+    .section-reveal.revealed .grid>.verdant-glass {
+      opacity: 1;
+      transform: none;
+    }
+
+    .section-reveal.revealed .grid>.verdant-glass:nth-child(1) {
+      transition-delay: 0.06s;
+    }
+
+    .section-reveal.revealed .grid>.verdant-glass:nth-child(2) {
+      transition-delay: 0.18s;
+    }
+
+    .section-reveal.revealed .grid>.verdant-glass:nth-child(3) {
+      transition-delay: 0.30s;
+    }
+
+    /* Stagger stack cards (experience, contact) */
+    .section-reveal .space-y-6>.verdant-glass,
+    .section-reveal .space-y-4>.verdant-glass {
+      opacity: 0;
+      transform: translateY(16px);
+      transition: opacity 0.5s ease, transform 0.5s ease;
+      will-change: opacity, transform;
+    }
+
+    .section-reveal.revealed .space-y-6>.verdant-glass,
+    .section-reveal.revealed .space-y-4>.verdant-glass {
+      opacity: 1;
+      transform: none;
+    }
+
+    .section-reveal.revealed .space-y-6>.verdant-glass:nth-child(1),
+    .section-reveal.revealed .space-y-4>.verdant-glass:nth-child(1) {
+      transition-delay: 0.06s;
+    }
+
+    .section-reveal.revealed .space-y-6>.verdant-glass:nth-child(2),
+    .section-reveal.revealed .space-y-4>.verdant-glass:nth-child(2) {
+      transition-delay: 0.2s;
+    }
+
+    .section-reveal.revealed .space-y-4>.verdant-glass:nth-child(3) {
+      transition-delay: 0.34s;
+    }
+
+    .section-reveal.revealed .space-y-4>.verdant-glass:nth-child(4) {
+      transition-delay: 0.46s;
+    }
+
+    /* Direct verdant-glass child of section (e.g. form card) */
+    .section-reveal>.verdant-glass {
+      opacity: 0;
+      transform: translateY(18px);
+      transition: opacity 0.5s ease 0.1s, transform 0.5s ease 0.1s;
+    }
+
+    .section-reveal.revealed>.verdant-glass {
+      opacity: 1;
+      transform: none;
+    }
+
+    /* Frame-sync active glow on section */
+    @keyframes section-sync-glow {
+
+      0%,
+      100% {
+        box-shadow: none;
+      }
+
+      50% {
+        box-shadow: 0 0 0 1px rgba(168, 85, 247, 0.09), 0 0 70px 14px rgba(168, 85, 247, 0.045);
+      }
+    }
+
+    .section-frame-active.is-synced {
+      animation: section-sync-glow 4s ease-in-out infinite;
+    }
+
+    /* ============================================
+       INFINITE BRAND LOGO MARQUEE & BLUR EDGES
+    ============================================ */
+    @keyframes marquee-scroll {
+      0% {
+        transform: translateX(0%);
+      }
+      100% {
+        transform: translateX(-50%);
+      }
+    }
+
+    .marquee-container {
+      position: relative;
+      overflow: hidden;
+      width: 100%;
+      mask-image: linear-gradient(to right, transparent 0%, black 10%, black 90%, transparent 100%);
+      -webkit-mask-image: linear-gradient(to right, transparent 0%, black 10%, black 90%, transparent 100%);
+    }
+
+    .marquee-track {
+      display: flex;
+      width: max-content;
+      animation: marquee-scroll 28s linear infinite;
+      will-change: transform;
+    }
+
+    .marquee-track:hover {
+      animation-play-state: paused;
+    }
+
+    .blur-edge-left {
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      left: 0;
+      width: 4.5rem;
+      z-index: 20;
+      pointer-events: none;
+      background: linear-gradient(to right, #0b0a1f 0%, rgba(11, 10, 31, 0.85) 60%, transparent 100%);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+    }
+
+    .blur-edge-right {
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      right: 0;
+      width: 4.5rem;
+      z-index: 20;
+      pointer-events: none;
+      background: linear-gradient(to left, #0b0a1f 0%, rgba(11, 10, 31, 0.85) 60%, transparent 100%);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+    }
+
+    @media (min-width: 768px) {
+      .blur-edge-left, .blur-edge-right {
+        width: 7.5rem;
+      }
+    }
+
+    /* ============================================
+       AMBIENT CUSTOM CURSOR & BUTTON SHINE TRIGGER
+    ============================================ */
+    @media (pointer: fine) {
+      body {
+        cursor: default;
+      }
+      a, button, input, select, textarea, .btn-3d, .btn-3d-ghost, .verdant-glass, .nav-link, .glass-badge {
+        cursor: pointer;
+      }
+    }
+
+    .custom-cursor-dot {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 8px;
+      height: 8px;
+      margin-top: -4px;
+      margin-left: -4px;
+      background-color: #c4a3ff;
+      border-radius: 50%;
+      pointer-events: none;
+      z-index: 9999;
+      box-shadow: 0 0 10px #c4a3ff, 0 0 20px #a855f7;
+      transition: transform 0.15s cubic-bezier(.16, 1, .3, 1), background-color 0.2s ease, opacity 0.3s ease;
+      opacity: 0;
+      will-change: transform;
+    }
+
+    .custom-cursor-ring {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 38px;
+      height: 38px;
+      margin-top: -19px;
+      margin-left: -19px;
+      border: 1.5px solid rgba(196, 163, 255, 0.45);
+      background: rgba(168, 85, 247, 0.08);
+      backdrop-filter: blur(3px);
+      -webkit-backdrop-filter: blur(3px);
+      border-radius: 50%;
+      pointer-events: none;
+      z-index: 9998;
+      box-shadow: 0 0 18px rgba(168, 85, 247, 0.25);
+      transition: width 0.28s cubic-bezier(.16, 1, .3, 1),
+                  height 0.28s cubic-bezier(.16, 1, .3, 1),
+                  margin 0.28s cubic-bezier(.16, 1, .3, 1),
+                  background 0.25s ease,
+                  border-color 0.25s ease,
+                  box-shadow 0.25s ease,
+                  opacity 0.3s ease;
+      opacity: 0;
+      will-change: transform;
+    }
+
+    .custom-cursor-aura {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 320px;
+      height: 320px;
+      margin-top: -160px;
+      margin-left: -160px;
+      background: radial-gradient(circle, rgba(168, 85, 247, 0.18) 0%, rgba(196, 163, 255, 0.06) 45%, transparent 70%);
+      border-radius: 50%;
+      pointer-events: none;
+      z-index: 9997;
+      mix-blend-mode: screen;
+      opacity: 0;
+      transition: opacity 0.4s ease, transform 0.25s ease;
+      will-change: transform;
+    }
+
+    /* Active state when cursor enters page */
+    body.cursor-active .custom-cursor-dot,
+    body.cursor-active .custom-cursor-ring,
+    body.cursor-active .custom-cursor-aura {
+      opacity: 1;
+    }
+
+    /* Hovering interactive elements */
+    body.cursor-hover .custom-cursor-ring {
+      width: 62px;
+      height: 62px;
+      margin-top: -31px;
+      margin-left: -31px;
+      background: rgba(196, 163, 255, 0.22);
+      border-color: rgba(255, 255, 255, 0.95);
+      box-shadow: 0 0 35px rgba(168, 85, 247, 0.75), 0 0 65px rgba(196, 163, 255, 0.5), inset 0 0 20px rgba(255, 255, 255, 0.4);
+    }
+
+    body.cursor-hover .custom-cursor-dot {
+      transform: scale(1.75);
+      background-color: #ffffff;
+      box-shadow: 0 0 16px #ffffff, 0 0 32px #c4a3ff;
+    }
+
+    body.cursor-hover .custom-cursor-aura {
+      opacity: 0.9;
+      transform: scale(1.25);
+    }
+
+    /* Dynamic Button Cursor Shine Flare Overlay */
+    .btn-3d, .btn-3d-ghost, .verdant-glass, .glass-badge {
+      overflow: hidden;
+    }
+
+    .btn-shine-light {
+      position: absolute;
+      inset: 0;
+      border-radius: inherit;
+      pointer-events: none;
+      z-index: 10;
+      opacity: 0;
+      transition: opacity 0.35s ease;
+      background: radial-gradient(
+        240px circle at var(--shine-x, 50%) var(--shine-y, 50%),
+        rgba(255, 255, 255, 0.75) 0%,
+        rgba(225, 190, 255, 0.5) 25%,
+        rgba(168, 85, 247, 0.2) 50%,
+        transparent 70%
+      );
+      mix-blend-mode: overlay;
+    }
+
+    /* Hover shine trigger on buttons & interactive cards */
+    .btn-3d:hover .btn-shine-light,
+    .btn-3d-ghost:hover .btn-shine-light,
+    .verdant-glass:hover .btn-shine-light {
+      opacity: 1;
+    }
+
+    /* ============================================
+       PRELOADER SCREEN & ENTRANCE ANIMATION
+    ============================================ */
+    #preloader {
+      position: fixed;
+      inset: 0;
+      width: 100vw;
+      height: 100vh;
+      background: #0b0a1f;
+      z-index: 99999;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      transition: opacity 0.85s cubic-bezier(.16, 1, .3, 1),
+                  transform 0.85s cubic-bezier(.16, 1, .3, 1),
+                  filter 0.85s ease;
+      will-change: opacity, transform, filter;
+    }
+
+    #preloader.preloader-hidden {
+      opacity: 0;
+      transform: scale(1.08);
+      filter: blur(12px);
+      pointer-events: none;
+    }
+
+    /* Ambient pulse glow behind logo */
+    .preloader-glow-bg {
+      position: absolute;
+      width: 450px;
+      height: 450px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(168, 85, 247, 0.28) 0%, rgba(138, 92, 246, 0.1) 45%, transparent 70%);
+      animation: preloader-pulse 3s ease-in-out infinite alternate;
+      pointer-events: none;
+    }
+
+    @keyframes preloader-pulse {
+      0% { transform: scale(0.9); opacity: 0.6; }
+      100% { transform: scale(1.15); opacity: 1; }
+    }
+
+    /* Dual spinning neon orbit rings */
+    .preloader-spin-ring {
+      position: absolute;
+      inset: -10px;
+      border-radius: 50%;
+      border: 2px solid transparent;
+      border-top-color: #c4a3ff;
+      border-right-color: rgba(168, 85, 247, 0.5);
+      animation: preloader-spin 1.8s linear infinite;
+    }
+
+    .preloader-spin-ring-reverse {
+      position: absolute;
+      inset: -18px;
+      border-radius: 50%;
+      border: 1.5px solid transparent;
+      border-bottom-color: #a855f7;
+      border-left-color: rgba(196, 163, 255, 0.4);
+      animation: preloader-spin-rev 2.4s linear infinite;
+    }
+
+    @keyframes preloader-spin {
+      100% { transform: rotate(360deg); }
+    }
+
+    @keyframes preloader-spin-rev {
+      100% { transform: rotate(-360deg); }
+    }
+  </style>
+</head>
+
+<body class="bg-background text-on-surface font-body overflow-x-hidden antialiased">
+
+  <!-- High-Tech Glassmorphic Preloader Screen -->
+  <div id="preloader" role="status" aria-label="Loading Website">
+    <div class="preloader-glow-bg"></div>
+
+    <div class="relative z-10 flex flex-col items-center text-center px-4">
+      <!-- Logo Container with Dual Spinning Neon Orbit Rings -->
+      <div class="relative mb-8 flex items-center justify-center">
+        <div class="preloader-spin-ring"></div>
+        <div class="preloader-spin-ring-reverse"></div>
+        <div class="w-20 h-20 rounded-full verdant-glass border border-white/20 p-2 flex items-center justify-center shadow-[0_0_30px_rgba(168,85,247,0.5)]">
+          <img src="assets/favicon.png" alt="Archangel Logo" class="w-full h-full rounded-full object-cover animate-pulse">
+        </div>
+      </div>
+
+      <!-- Title & Dynamic Status -->
+      <h2 class="font-display text-xl md:text-2xl font-bold tracking-[0.25em] text-on-surface uppercase mb-2">
+        ARCHANGEL
+      </h2>
+      <p id="preloader-status" class="text-xs font-semibold tracking-widest text-primary/80 uppercase mb-8 h-4">
+        Initializing Visual Experience...
+      </p>
+
+      <!-- Percentage Counter & Progress Bar -->
+      <div class="flex flex-col items-center gap-3">
+        <div id="preloader-percent" class="font-display text-3xl md:text-4xl font-extrabold text-on-surface drop-shadow-[0_0_15px_rgba(196,163,255,0.6)]">
+          0%
+        </div>
+        <div class="w-64 sm:w-80 h-2 rounded-full bg-white/10 overflow-hidden border border-white/10 p-0.5 relative shadow-inner">
+          <div id="preloader-bar" class="h-full w-0 bg-gradient-to-r from-purple-600 via-primary to-purple-300 rounded-full transition-all duration-200 ease-out shadow-[0_0_15px_#c4a3ff]"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Ambient Custom Cursor System -->
+  <div id="cursor-dot" class="custom-cursor-dot" aria-hidden="true"></div>
+  <div id="cursor-ring" class="custom-cursor-ring" aria-hidden="true"></div>
+  <div id="cursor-aura" class="custom-cursor-aura" aria-hidden="true"></div>
+
+  <!-- Ambient Sprite Background -->
+  <canvas id="sprite-bg" aria-hidden="true"></canvas>
+  <div id="bg-glow"></div>
+
+  <!-- Floating Navigation Bar -->
+  <nav class="fixed top-0 z-50 w-full transition-all duration-300">
+    <div class="mx-auto max-w-6xl px-4 pt-6">
+      <div
+        class="glass-badge rounded-full px-6 py-3 flex justify-between items-center border border-white/10 shadow-2xl">
+        <div class="font-display text-lg font-bold text-on-surface flex items-center gap-3">
+          <!-- Logo Integration -->
+          <img src="assets/favicon.png" alt="Archange"
+            class="h-8 w-auto rounded-full object-cover border border-primary/50">
+          <span>Archangel</span>
+        </div>
+        <div class="hidden md:flex gap-6 text-sm font-medium text-on-surface-variant">
+          <a class="nav-link" href="#about">About</a>
+          <a class="nav-link" href="#brands">Brands</a>
+          <a class="nav-link" href="#services">Services</a>
+          <a class="nav-link" href="#designs">Gallery</a>
+          <a class="nav-link" href="#packs">Packages</a>
+          <a class="nav-link" href="#experience">Experience</a>
+          <a class="nav-link" href="#contact-section">Contact</a>
+        </div>
+        <div class="flex items-center gap-3">
+          <a href="#contact-section" class="btn-3d-ghost hidden sm:inline-block px-4 py-2 rounded-full text-xs">Contact
+            Me</a>
+          <a href="#packs" class="btn-3d px-5 py-2 rounded-full text-xs">
+            Get Started <span class="material-symbols-outlined text-sm" style="font-size:1rem;">arrow_forward</span>
+          </a>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <main class="pt-36">
+    <!-- Hero Section -->
+    <section class="relative px-4 text-center max-w-4xl mx-auto pb-20 section-frame-active" id="about"
+      data-frame-start="0" data-frame-end="50">
+      <!-- Status Badge -->
+      <div
+        class="inline-flex items-center gap-2 glass-badge rounded-full px-4 py-1.5 mb-8 border border-white/10 text-xs text-on-surface-variant">
+        <span class="w-2 h-2 rounded-full bg-primary-container animate-pulse"></span>
+        <span>Open to Remote &amp; Worldwide Relocation (Requires Sponsorship)</span>
+      </div>
+
+      <!-- Headline -->
+      <h1 class="font-display text-5xl md:text-7xl font-bold tracking-tight text-on-surface leading-[1.15] mb-6">
+        Visual Identities that <br>
+        <span class="italic font-normal text-primary">grow with your brand.</span>
+      </h1>
+
+      <!-- Subtitle -->
+      <p class="text-on-surface-variant text-base md:text-lg max-w-2xl mx-auto font-normal leading-relaxed mb-10">
+        Creative, detail-oriented Graphic Designer &amp; UI/UX Specialist with 3+ years of experience delivering
+        end-to-end visual identity systems, digital media, packaging solutions, and marketing collateral.
+      </p>
+
+      <!-- CTA Buttons -->
+      <div class="flex flex-col sm:flex-row items-center justify-center gap-4 mb-8">
+        <a href="https://www.linkedin.com/in/abdelmajid-abbassi-51b3682b4/" target="_blank" class="btn-3d px-8 py-4 rounded-full text-sm"
+          id="hero-cta-primary">
+          LinkedIn profile<span class="material-symbols-outlined" style="font-size:1.1rem;">open_in_new</span>
+        </a>
+        <a href="https://www.behance.net/majdiabbassi" target="_blank"
+          class="btn-3d-ghost px-8 py-4 rounded-full text-sm" id="hero-cta-secondary">
+          Behance Showcase
+        </a>
+      </div>
+
+      <!-- Key Competencies Badges -->
+      <div class="flex flex-wrap items-center justify-center gap-4 text-xs text-on-surface-variant/80">
+        <span class="flex items-center gap-1.5"><span
+            class="material-symbols-outlined text-primary text-sm">check_circle</span> 3+ Years Experience</span>
+        <span class="flex items-center gap-1.5"><span
+            class="material-symbols-outlined text-primary text-sm">check_circle</span> End-to-End Delivery</span>
+        <span class="flex items-center gap-1.5"><span
+            class="material-symbols-outlined text-primary text-sm">check_circle</span> UI/UX &amp; Branding</span>
+      </div>
+    </section>
+
+    <!-- Brands & Clients Showcase Section -->
+    <section class="max-w-6xl mx-auto px-4 py-12 section-reveal section-frame-active" id="brands"
+      data-frame-start="35" data-frame-end="75">
+      <div class="text-center mb-8">
+        <span class="glass-badge text-[11px] font-semibold uppercase tracking-widest px-3.5 py-1 rounded-full border border-primary/20 text-primary mb-3 inline-block">
+          Trusted By &amp; Worked For
+        </span>
+        <h2 class="font-display text-2xl md:text-3xl font-bold text-on-surface">Brands I've Worked For</h2>
+        <p class="text-on-surface-variant text-xs md:text-sm max-w-lg mx-auto mt-2">
+          Delivering high-impact visual identity, custom graphics, packaging, and UI/UX design for leading clients.
+        </p>
+      </div>
+
+      <!-- Infinite Logo Loop Container with Left & Right Blur Overlays -->
+      <div class="relative py-6 overflow-hidden rounded-2xl border border-white/10 bg-surface-container/30 backdrop-blur-md shadow-2xl">
+        <div class="marquee-container">
+          <div class="marquee-track">
+            <!-- Set 1 of Brand Logos -->
+            <div class="flex items-center gap-6 px-3">
+              <div class="verdant-glass px-6 py-4 rounded-xl flex items-center justify-center min-w-[190px] h-24 group hover:border-primary/40 transition-all shadow-md">
+                <img src="assets/logos/Exclude.png" alt="Exclude Brand Logo" class="max-h-12 w-auto object-contain opacity-90 group-hover:opacity-100 group-hover:scale-105 transition-all duration-300 filter drop-shadow-[0_2px_8px_rgba(255,255,255,0.15)]">
+              </div>
+              <div class="verdant-glass px-6 py-4 rounded-xl flex items-center justify-center min-w-[190px] h-24 group hover:border-primary/40 transition-all shadow-md">
+                <img src="assets/logos/kenza.png" alt="Kenza Select Shoppa Logo" class="max-h-12 w-auto object-contain opacity-90 group-hover:opacity-100 group-hover:scale-105 transition-all duration-300 filter drop-shadow-[0_2px_8px_rgba(255,255,255,0.15)]">
+              </div>
+              <div class="verdant-glass px-6 py-4 rounded-xl flex items-center justify-center min-w-[190px] h-24 group hover:border-primary/40 transition-all shadow-md">
+                <img src="assets/logos/lahmar.png" alt="Lahmar Logo" class="max-h-12 w-auto object-contain opacity-90 group-hover:opacity-100 group-hover:scale-105 transition-all duration-300 filter drop-shadow-[0_2px_8px_rgba(255,255,255,0.15)]">
+              </div>
+              <div class="verdant-glass px-6 py-4 rounded-xl flex items-center justify-center min-w-[190px] h-24 group hover:border-primary/40 transition-all shadow-md">
+                <img src="assets/logos/zola.png" alt="Zola Logo" class="max-h-12 w-auto object-contain opacity-90 group-hover:opacity-100 group-hover:scale-105 transition-all duration-300 filter drop-shadow-[0_2px_8px_rgba(255,255,255,0.15)]">
+              </div>
+              <div class="verdant-glass px-6 py-4 rounded-xl flex items-center justify-center min-w-[190px] h-24 group hover:border-primary/40 transition-all shadow-md">
+                <img src="assets/logos/mylogo.png" alt="Archangel Logo" class="max-h-12 w-auto object-contain opacity-90 group-hover:opacity-100 group-hover:scale-105 transition-all duration-300 filter drop-shadow-[0_2px_8px_rgba(255,255,255,0.15)]">
+              </div>
+              <div class="verdant-glass px-6 py-4 rounded-xl flex items-center justify-center min-w-[190px] h-24 group hover:border-primary/40 transition-all shadow-md">
+                <img src="assets/logos/card.png" alt="Geometric Business Card Logo" class="max-h-12 w-auto object-contain opacity-90 group-hover:opacity-100 group-hover:scale-105 transition-all duration-300 filter drop-shadow-[0_2px_8px_rgba(255,255,255,0.15)]">
+              </div>
+            </div>
+            <!-- Set 2 of Brand Logos (Duplicated for Seamless Infinite Loop) -->
+            <div class="flex items-center gap-6 px-3" aria-hidden="true">
+              <div class="verdant-glass px-6 py-4 rounded-xl flex items-center justify-center min-w-[190px] h-24 group hover:border-primary/40 transition-all shadow-md">
+                <img src="assets/logos/Exclude.png" alt="Exclude Brand Logo" class="max-h-12 w-auto object-contain opacity-90 group-hover:opacity-100 group-hover:scale-105 transition-all duration-300 filter drop-shadow-[0_2px_8px_rgba(255,255,255,0.15)]">
+              </div>
+              <div class="verdant-glass px-6 py-4 rounded-xl flex items-center justify-center min-w-[190px] h-24 group hover:border-primary/40 transition-all shadow-md">
+                <img src="assets/logos/kenza.png" alt="Kenza Select Shoppa Logo" class="max-h-12 w-auto object-contain opacity-90 group-hover:opacity-100 group-hover:scale-105 transition-all duration-300 filter drop-shadow-[0_2px_8px_rgba(255,255,255,0.15)]">
+              </div>
+              <div class="verdant-glass px-6 py-4 rounded-xl flex items-center justify-center min-w-[190px] h-24 group hover:border-primary/40 transition-all shadow-md">
+                <img src="assets/logos/lahmar.png" alt="Lahmar Logo" class="max-h-12 w-auto object-contain opacity-90 group-hover:opacity-100 group-hover:scale-105 transition-all duration-300 filter drop-shadow-[0_2px_8px_rgba(255,255,255,0.15)]">
+              </div>
+              <div class="verdant-glass px-6 py-4 rounded-xl flex items-center justify-center min-w-[190px] h-24 group hover:border-primary/40 transition-all shadow-md">
+                <img src="assets/logos/zola.png" alt="Zola Logo" class="max-h-12 w-auto object-contain opacity-90 group-hover:opacity-100 group-hover:scale-105 transition-all duration-300 filter drop-shadow-[0_2px_8px_rgba(255,255,255,0.15)]">
+              </div>
+              <div class="verdant-glass px-6 py-4 rounded-xl flex items-center justify-center min-w-[190px] h-24 group hover:border-primary/40 transition-all shadow-md">
+                <img src="assets/logos/mylogo.png" alt="Archangel Logo" class="max-h-12 w-auto object-contain opacity-90 group-hover:opacity-100 group-hover:scale-105 transition-all duration-300 filter drop-shadow-[0_2px_8px_rgba(255,255,255,0.15)]">
+              </div>
+              <div class="verdant-glass px-6 py-4 rounded-xl flex items-center justify-center min-w-[190px] h-24 group hover:border-primary/40 transition-all shadow-md">
+                <img src="assets/logos/card.png" alt="Geometric Business Card Logo" class="max-h-12 w-auto object-contain opacity-90 group-hover:opacity-100 group-hover:scale-105 transition-all duration-300 filter drop-shadow-[0_2px_8px_rgba(255,255,255,0.15)]">
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 3-Column Glass Feature Cards -->
+    <section class="max-w-6xl mx-auto px-4 py-12 section-reveal section-frame-active" id="services"
+      data-frame-start="50" data-frame-end="105">
+      <h2 class="font-display text-3xl font-bold text-center mb-10">Core Services</h2>
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+
+        <!-- Card 1 -->
+        <div class="verdant-glass p-8 flex flex-col justify-between h-[420px]">
+          <div>
+            <div
+              class="w-10 h-10 rounded-lg bg-primary/10 border border-primary/20 flex items-center justify-center text-primary mb-6">
+              <span class="material-symbols-outlined">palette</span>
+            </div>
+            <h3 class="font-display text-xl font-semibold text-on-surface mb-3">Brand Identity Systems</h3>
+            <p class="text-on-surface-variant text-sm leading-relaxed">
+              Developing complete visual branding packages including logo systems, typography, color palettes, and
+              comprehensive style guides.
+            </p>
+          </div>
+
+          <div class="mt-6 p-4 rounded-xl bg-background/50 border border-white/5 flex items-center justify-around">
+            <div class="space-y-2 text-xs text-on-surface-variant">
+              <div class="p-1.5 rounded bg-white/5 border border-white/5">Illustrator</div>
+              <div class="p-1.5 rounded bg-white/5 border border-white/5">Figma</div>
+              <div class="p-1.5 rounded bg-white/5 border border-white/5">Photoshop</div>
+            </div>
+            <div class="text-primary text-lg">➔</div>
+            <div
+              class="p-3 rounded-lg bg-primary-container/20 border border-primary-container/40 text-primary font-bold text-xs">
+              Brand Book
+            </div>
+          </div>
+        </div>
+
+        <!-- Card 2 -->
+        <div class="verdant-glass p-8 flex flex-col justify-between h-[420px]">
+          <div>
+            <div
+              class="w-10 h-10 rounded-lg bg-primary/10 border border-primary/20 flex items-center justify-center text-primary mb-6">
+              <span class="material-symbols-outlined">touch_app</span>
+            </div>
+            <h3 class="font-display text-xl font-semibold text-on-surface mb-3">UI/UX Design & Prototyping</h3>
+            <p class="text-on-surface-variant text-sm leading-relaxed">
+              Crafting modern web interfaces, interactive prototypes, and intuitive user flows designed in Figma and
+              Framer to increase engagement.
+            </p>
+          </div>
+
+          <div class="mt-6 p-4 rounded-xl bg-background/50 border border-white/5 text-center">
+            <span
+              class="inline-block px-2.5 py-1 rounded-full bg-primary-container/20 text-primary font-bold text-xs mb-2">High
+              Conversion</span>
+            <div class="h-16 flex items-end justify-center gap-1.5 pt-2">
+              <div class="w-4 bg-primary/20 h-[30%] rounded-t"></div>
+              <div class="w-4 bg-primary/40 h-[50%] rounded-t"></div>
+              <div class="w-4 bg-primary/70 h-[70%] rounded-t"></div>
+              <div class="w-4 bg-primary-container h-[95%] rounded-t shadow-[0_0_10px_#a855f7]"></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Card 3 -->
+        <div class="verdant-glass p-8 flex flex-col justify-between h-[420px]">
+          <div>
+            <div
+              class="w-10 h-10 rounded-lg bg-primary/10 border border-primary/20 flex items-center justify-center text-primary mb-6">
+              <span class="material-symbols-outlined">print</span>
+            </div>
+            <h3 class="font-display text-xl font-semibold text-on-surface mb-3">Packaging & Print Solutions</h3>
+            <p class="text-on-surface-variant text-sm leading-relaxed">
+              Print-ready packaging and flyer solutions, managing precise color calibration, bleeds, and resolution
+              standards for press runs.
+            </p>
+          </div>
+
+          <div class="mt-6 p-4 rounded-xl bg-background/50 border border-white/5 flex items-center justify-center">
+            <div class="relative w-20 h-20 rounded-full border border-primary/30 flex items-center justify-center">
+              <div class="w-12 h-12 rounded-full border border-primary/50 flex items-center justify-center">
+                <span class="material-symbols-outlined text-primary text-xl">verified</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- Design Gallery Showcase -->
+    <section class="max-w-6xl mx-auto px-4 py-16 section-reveal section-frame-active" id="designs"
+      data-frame-start="105" data-frame-end="165">
+      <div class="text-center mb-12">
+        <h2 class="font-display text-3xl md:text-4xl font-bold mb-4">Design Portfolio</h2>
+        <p class="text-on-surface-variant text-sm max-w-xl mx-auto">A collection of custom visual assets, brand
+          identities, and modern UI components created for clients across retail, tech, and service sectors.</p>
+      </div>
+
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        <!-- Design Item 1 -->
+        <div class="verdant-glass group overflow-hidden rounded-2xl flex flex-col">
+          <div class="relative h-64 w-full bg-surface-container overflow-hidden">
+            <div
+              class="absolute inset-0 bg-gradient-to-t from-background via-transparent to-transparent z-10 opacity-70">
+            </div>
+            <div
+              class="w-full h-full flex items-center justify-center text-on-surface-variant/40 group-hover:scale-105 transition-transform duration-500 bg-cover bg-center"
+              style="background-image:url('assets/work/slas.png'), linear-gradient(135deg, #1d1840 0%, #a855f7 100%);">
+              <span class="material-symbols-outlined text-6xl text-white/20">style</span>
+            </div>
+          </div>
+          <div class="p-6">
+            <span class="text-[10px] font-bold tracking-widest uppercase text-primary mb-2 block">Brand Identity</span>
+            <h3 class="font-display text-lg font-bold text-on-surface mb-2">Corporate Brand System</h3>
+            <p class="text-xs text-on-surface-variant leading-relaxed mb-4">Complete visual branding package featuring
+              custom logos, color palettes, and brand guidelines.</p>
+            <a href="https://www.behance.net/majdiabbassi" target="_blank"
+              class="inline-flex items-center gap-1 text-xs text-primary font-bold hover:underline">View Project <span
+                class="material-symbols-outlined text-sm">arrow_forward</span></a>
+          </div>
+        </div>
+
+        <!-- Design Item 2 -->
+        <div class="verdant-glass group overflow-hidden rounded-2xl flex flex-col">
+          <div class="relative h-64 w-full bg-surface-container overflow-hidden">
+            <div
+              class="absolute inset-0 bg-gradient-to-t from-background via-transparent to-transparent z-10 opacity-70">
+            </div>
+            <div
+              class="w-full h-full flex items-center justify-center text-on-surface-variant/40 group-hover:scale-105 transition-transform duration-500 bg-cover bg-center"
+              style="background-image:url('assets/work/365.png'), linear-gradient(135deg, #0b0a1f 0%, #3b82f6 100%);">
+              <span class="material-symbols-outlined text-6xl text-white/20">devices</span>
+            </div>
+          </div>
+          <div class="p-6">
+            <span class="text-[10px] font-bold tracking-widest uppercase text-primary mb-2 block">UI/UX Design</span>
+            <h3 class="font-display text-lg font-bold text-on-surface mb-2">Interactive Dashboard</h3>
+            <p class="text-xs text-on-surface-variant leading-relaxed mb-4">Modern dark-mode dashboard interface
+              designed in Figma and Framer focusing on intuitiveness.</p>
+            <a href="https://www.behance.net/majdiabbassi" target="_blank"
+              class="inline-flex items-center gap-1 text-xs text-primary font-bold hover:underline">View Case Study
+              <span class="material-symbols-outlined text-sm">arrow_forward</span></a>
+          </div>
+        </div>
+
+        <!-- Design Item 3 -->
+        <div class="verdant-glass group overflow-hidden rounded-2xl flex flex-col">
+          <div class="relative h-64 w-full bg-surface-container overflow-hidden">
+            <div
+              class="absolute inset-0 bg-gradient-to-t from-background via-transparent to-transparent z-10 opacity-70">
+            </div>
+            <div
+              class="w-full h-full flex items-center justify-center text-on-surface-variant/40 group-hover:scale-105 transition-transform duration-500 bg-cover bg-center"
+              style="background-image:url('assets/work/affiche-final.png'), linear-gradient(135deg, #1d1840 0%, #ec4899 100%);">
+              <span class="material-symbols-outlined text-6xl text-white/20">inventory_2</span>
+            </div>
+          </div>
+          <div class="p-6">
+            <span class="text-[10px] font-bold tracking-widest uppercase text-primary mb-2 block">Packaging</span>
+            <h3 class="font-display text-lg font-bold text-on-surface mb-2">Commercial Packaging Suite</h3>
+            <p class="text-xs text-on-surface-variant leading-relaxed mb-4">Print-ready box and product packaging with
+              color calibration, bleeds, and press-ready layouts.</p>
+            <a href="https://www.behance.net/majdiabbassi" target="_blank"
+              class="inline-flex items-center gap-1 text-xs text-primary font-bold hover:underline">View Artwork <span
+                class="material-symbols-outlined text-sm">arrow_forward</span></a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Freelance Packs / Pricing Tiers -->
+    <section class="max-w-6xl mx-auto px-4 py-16 border-t border-white/5 section-reveal section-frame-active" id="packs"
+      data-frame-start="165" data-frame-end="220">
+      <div class="text-center mb-12">
+        <h2 class="font-display text-3xl md:text-4xl font-bold mb-4">Freelance Packages</h2>
+        <p class="text-on-surface-variant text-sm max-w-xl mx-auto">Tailored service packages built to match your
+          brand's specific stage and project scope.</p>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+        <!-- Pack 1 -->
+        <div class="verdant-glass p-8 flex flex-col justify-between">
+          <div>
+            <span
+              class="glass-badge text-xs px-3 py-1 rounded-full border border-white/10 text-on-surface-variant">Essential</span>
+            <h3 class="font-display text-2xl font-bold text-on-surface mt-4 mb-2">Starter Identity</h3>
+            <p class="text-xs text-on-surface-variant mb-6">Perfect for new startups and small businesses needing quick,
+              high-converting assets.</p>
+
+            <ul class="space-y-3 text-xs text-on-surface-variant mb-8">
+              <li class="flex items-center gap-2"><span
+                  class="material-symbols-outlined text-primary text-sm">check</span> Primary &amp; Secondary Logo</li>
+              <li class="flex items-center gap-2"><span
+                  class="material-symbols-outlined text-primary text-sm">check</span> Color Palette &amp; Typography
+              </li>
+              <li class="flex items-center gap-2"><span
+                  class="material-symbols-outlined text-primary text-sm">check</span> Social Media Templates</li>
+              <li class="flex items-center gap-2"><span
+                  class="material-symbols-outlined text-primary text-sm">check</span> High-Res Vector Formats</li>
+            </ul>
+          </div>
+
+          <a href="#contact-section"
+            class="btn-3d-ghost w-full py-3 rounded-full text-xs block text-center">Select
+            Package</a>
+        </div>
+
+        <!-- Pack 2 (Highlighted) -->
+        <div
+          class="verdant-glass p-8 flex flex-col justify-between border-primary/50 relative shadow-[0_0_30px_rgba(168,85,247,0.2)]">
+          <div
+            class="absolute -top-3 left-1/2 -translate-x-1/2 bg-primary-container text-surface font-bold text-[10px] uppercase tracking-wider px-3 py-0.5 rounded-full">
+            Most Popular</div>
+          <div>
+            <span class="glass-badge text-xs px-3 py-1 rounded-full border border-primary/30 text-primary">Pro
+              Suite</span>
+            <h3 class="font-display text-2xl font-bold text-on-surface mt-4 mb-2">Brand &amp; UI/UX Pack</h3>
+            <p class="text-xs text-on-surface-variant mb-6">Complete brand overhaul paired with modern digital UI/UX
+              interface design.</p>
+
+            <ul class="space-y-3 text-xs text-on-surface-variant mb-8">
+              <li class="flex items-center gap-2"><span
+                  class="material-symbols-outlined text-primary text-sm">check</span> Full Visual Identity System</li>
+              <li class="flex items-center gap-2"><span
+                  class="material-symbols-outlined text-primary text-sm">check</span> Complete Brand Style Guide</li>
+              <li class="flex items-center gap-2"><span
+                  class="material-symbols-outlined text-primary text-sm">check</span> Custom UI/UX Design (Figma)</li>
+              <li class="flex items-center gap-2"><span
+                  class="material-symbols-outlined text-primary text-sm">check</span> Interactive Web Prototype</li>
+              <li class="flex items-center gap-2"><span
+                  class="material-symbols-outlined text-primary text-sm">check</span> Print &amp; Digital Collateral
+              </li>
+            </ul>
+          </div>
+
+          <a href="#contact-section" class="btn-3d w-full py-3 rounded-full text-xs block text-center">Select
+            Package</a>
+        </div>
+
+        <!-- Pack 3 -->
+        <div class="verdant-glass p-8 flex flex-col justify-between">
+          <div>
+            <span
+              class="glass-badge text-xs px-3 py-1 rounded-full border border-white/10 text-on-surface-variant">Enterprise</span>
+            <h3 class="font-display text-2xl font-bold text-on-surface mt-4 mb-2">Full Enterprise System</h3>
+            <p class="text-xs text-on-surface-variant mb-6">End-to-end multi-channel visual assets, packaging, and
+              digital interfaces.</p>
+
+            <ul class="space-y-3 text-xs text-on-surface-variant mb-8">
+              <li class="flex items-center gap-2"><span
+                  class="material-symbols-outlined text-primary text-sm">check</span> Comprehensive Brand Guidelines
+              </li>
+              <li class="flex items-center gap-2"><span
+                  class="material-symbols-outlined text-primary text-sm">check</span> Print-Ready Packaging Suite</li>
+              <li class="flex items-center gap-2"><span
+                  class="material-symbols-outlined text-primary text-sm">check</span> Multi-Page Web &amp; App UI Design
+              </li>
+              <li class="flex items-center gap-2"><span
+                  class="material-symbols-outlined text-primary text-sm">check</span> High-Volume Marketing Campaign
+                Assets</li>
+            </ul>
+          </div>
+
+          <a href="#contact-section"
+            class="btn-3d-ghost w-full py-3 rounded-full text-xs block text-center">Select
+            Package</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- Experience Section -->
+    <section class="max-w-6xl mx-auto px-4 py-16 section-reveal section-frame-active" id="experience"
+      data-frame-start="220" data-frame-end="265">
+      <h2 class="font-display text-3xl font-bold text-center mb-12">Professional Experience</h2>
+      <div class="space-y-6">
+        <div class="verdant-glass p-8">
+          <div class="flex flex-col md:flex-row justify-between md:items-center mb-4">
+            <div>
+              <h3 class="text-xl font-bold text-on-surface">Freelance Graphic Designer &amp; Brand Specialist</h3>
+              <p class="text-primary text-sm font-medium">Self-Employed • Tunis, Tunisia / Remote</p>
+            </div>
+            <span
+              class="text-xs glass-badge px-3 py-1 rounded-full border border-white/10 text-on-surface-variant w-fit mt-2 md:mt-0">2024
+              - Present</span>
+          </div>
+          <ul class="list-disc list-inside space-y-2 text-sm text-on-surface-variant/90 leading-relaxed">
+            <li>Developed end-to-end visual branding packages including logos, typography, color palettes, and style
+              guides.</li>
+            <li>Designed high-converting digital visual assets across multi-channel campaigns to boost brand awareness.
+            </li>
+            <li>Produced print-ready packaging and flyers, managing color calibration, bleeds, and resolution standards.
+            </li>
+            <li>Managed complete client lifecycles from initial strategy consultation to final asset delivery.</li>
+          </ul>
+        </div>
+
+        <div class="verdant-glass p-8">
+          <div class="flex flex-col md:flex-row justify-between md:items-center mb-4">
+            <div>
+              <h3 class="text-xl font-bold text-on-surface">Junior Graphic Designer</h3>
+              <p class="text-primary text-sm font-medium">Alliance Com Events • sousse, Tunisia</p>
+            </div>
+            <span
+              class="text-xs glass-badge px-3 py-1 rounded-full border border-white/10 text-on-surface-variant w-fit mt-2 md:mt-0">2025
+              - 2026 (1 year)</span>
+          </div>
+          <ul class="list-disc list-inside space-y-2 text-sm text-on-surface-variant/90 leading-relaxed">
+            <li>Collaborated with senior leads to design promotional collateral, digital banners, and event signage.
+            </li>
+            <li>Maintained strict brand consistency across large-scale print and digital marketing assets under tight
+              deadlines.</li>
+            <li>Streamlined layout production workflows, accelerating revision cycles for multi-channel campaigns.</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- Technical Certifications & Languages Bar -->
+    <section class="py-16 text-center max-w-6xl mx-auto border-t border-white/5 mt-12">
+      <p class="text-xs uppercase tracking-widest text-on-surface-variant/60 font-semibold mb-8">
+        Education &amp; Professional Credentials
+      </p>
+      <div
+        class="flex flex-wrap justify-center items-center gap-6 md:gap-12 text-on-surface-variant/80 font-display font-medium text-sm">
+        <span class="flex items-center gap-2"><span class="material-symbols-outlined text-primary">school</span> Diploma
+          in Graphic Design (IMSET)</span>
+        <span class="flex items-center gap-2"><span
+            class="material-symbols-outlined text-primary">workspace_premium</span> Google UX Certified</span>
+        <span class="flex items-center gap-2"><span class="material-symbols-outlined text-primary">verified</span> Adobe
+          Photoshop Expert</span>
+        <span class="flex items-center gap-2"><span class="material-symbols-outlined text-primary">verified</span> Canva
+          Sentinels Certified</span>
+      </div>
+
+      <div class="mt-8 pt-6 border-t border-white/5 flex justify-center gap-8 text-xs text-on-surface-variant/70">
+        <span><strong>English:</strong> Professional</span>
+        <span><strong>French:</strong> Intermediate</span>
+        <span><strong>Arabic:</strong> Native / Bilingual</span>
+      </div>
+    </section>
+
+    <!-- NEW DEDICATED CONTACT SECTION (Above Footer) -->
+    <section class="max-w-6xl mx-auto px-4 py-16 border-t border-white/5 section-reveal section-frame-active"
+      id="contact-section" data-frame-start="265" data-frame-end="299">
+      <div class="text-center mb-12">
+        <span class="glass-badge text-xs px-3 py-1 rounded-full border border-primary/30 text-primary">Let's
+          Connect</span>
+        <h2 class="font-display text-3xl md:text-5xl font-bold mt-4 mb-4">Start Your Project</h2>
+        <p class="text-on-surface-variant text-sm max-w-xl mx-auto">Have a project in mind, need a custom brand
+          identity, or looking to hire? Send a message and let's work together.</p>
+      </div>
+
+      <div class="grid grid-cols-1 lg:grid-cols-5 gap-8">
+        <!-- Quick Contact Cards -->
+        <div class="lg:col-span-2 space-y-4">
+          <a href="mailto:majdiabbassi222@gmail.com" class="verdant-glass p-6 block group">
+            <div class="flex items-center gap-4">
+              <div
+                class="w-12 h-12 rounded-xl bg-primary/10 border border-primary/20 flex items-center justify-center text-primary group-hover:bg-primary group-hover:text-surface transition-colors">
+                <span class="material-symbols-outlined">mail</span>
+              </div>
+              <div>
+                <p class="text-[11px] uppercase tracking-wider text-on-surface-variant/70">Email Direct</p>
+                <p class="text-sm font-bold text-on-surface group-hover:text-primary transition-colors">
+                  majdiabbassi222@gmail.com</p>
+              </div>
+            </div>
+          </a>
+
+          <a href="tel:+21695223510" class="verdant-glass p-6 block group">
+            <div class="flex items-center gap-4">
+              <div
+                class="w-12 h-12 rounded-xl bg-primary/10 border border-primary/20 flex items-center justify-center text-primary group-hover:bg-primary group-hover:text-surface transition-colors">
+                <span class="material-symbols-outlined">call</span>
+              </div>
+              <div>
+                <p class="text-[11px] uppercase tracking-wider text-on-surface-variant/70">Phone / WhatsApp</p>
+                <p class="text-sm font-bold text-on-surface group-hover:text-primary transition-colors">+216 95 223 510
+                </p>
+              </div>
+            </div>
+          </a>
+
+          <a href="https://linkedin.com/in/abdelmajid-abbassi" target="_blank" class="verdant-glass p-6 block group">
+            <div class="flex items-center gap-4">
+              <div
+                class="w-12 h-12 rounded-xl bg-primary/10 border border-primary/20 flex items-center justify-center text-primary group-hover:bg-primary group-hover:text-surface transition-colors">
+                <span class="material-symbols-outlined">link</span>
+              </div>
+              <div>
+                <p class="text-[11px] uppercase tracking-wider text-on-surface-variant/70">LinkedIn Profile</p>
+                <p class="text-sm font-bold text-on-surface group-hover:text-primary transition-colors">
+                  linkedin.com/in/abdelmajid-abbassi</p>
+              </div>
+            </div>
+          </a>
+
+          <div class="verdant-glass p-6">
+            <div class="flex items-center gap-4">
+              <div
+                class="w-12 h-12 rounded-xl bg-primary/10 border border-primary/20 flex items-center justify-center text-primary">
+                <span class="material-symbols-outlined">location_on</span>
+              </div>
+              <div>
+                <p class="text-[11px] uppercase tracking-wider text-on-surface-variant/70">Location &amp; Availability
+                </p>
+                <p class="text-sm font-bold text-on-surface">Tunis, Tunisia • Remote / Worldwide</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Contact Form -->
+        <div class="lg:col-span-3 verdant-glass p-8">
+          <form id="contact-form" class="space-y-4" novalidate>
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div>
+                <label class="block text-xs font-semibold text-on-surface-variant mb-2">Your Name</label>
+                <input type="text" name="name" required placeholder="John Doe"
+                  class="w-full bg-background/60 border border-white/10 rounded-xl px-4 py-3 text-xs text-on-surface focus:outline-none focus:border-primary transition-colors"
+                  aria-label="Your Name">
+              </div>
+              <div>
+                <label class="block text-xs font-semibold text-on-surface-variant mb-2">Your Email</label>
+                <input type="email" name="email" required placeholder="john@example.com"
+                  class="w-full bg-background/60 border border-white/10 rounded-xl px-4 py-3 text-xs text-on-surface focus:outline-none focus:border-primary transition-colors"
+                  aria-label="Your Email">
+              </div>
+            </div>
+
+            <div>
+              <label class="block text-xs font-semibold text-on-surface-variant mb-2">Subject / Interested
+                Package</label>
+              <select name="package"
+                class="w-full bg-background/60 border border-white/10 rounded-xl px-4 py-3 text-xs text-on-surface focus:outline-none focus:border-primary transition-colors">
+                <option value="General Inquiry">General Inquiry</option>
+                <option value="Starter Identity">Starter Identity Package</option>
+                <option value="Pro Brand & UI Suite">Pro Brand &amp; UI/UX Suite</option>
+                <option value="Full Enterprise System">Full Enterprise System</option>
+                <option value="Job / Relocation Opportunity">Job Offer / Relocation</option>
+              </select>
+            </div>
+
+            <div>
+              <label class="block text-xs font-semibold text-on-surface-variant mb-2">Message</label>
+              <textarea name="message" rows="4" required placeholder="Tell me about your project or inquiry..."
+                class="w-full bg-background/60 border border-white/10 rounded-xl px-4 py-3 text-xs text-on-surface focus:outline-none focus:border-primary transition-colors resize-none"
+                aria-label="Message"></textarea>
+            </div>
+
+            <button type="submit" id="submit-btn"
+              class="btn-3d w-full py-4 rounded-xl text-xs flex items-center justify-center gap-2" disabled>
+              <span class="btn-text">Send Message</span>
+              <span class="material-symbols-outlined text-base btn-icon">send</span>
+              <span class="btn-loader hidden" aria-hidden="true">
+                <svg class="animate-spin h-5 w-5" viewBox="0 0 24 24">
+                  <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"
+                    fill="none" />
+                  <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
+                </svg>
+              </span>
+            </button>
+
+            <div id="form-message" class="hidden text-xs text-center px-4 py-2 rounded-xl" role="status"
+              aria-live="polite"></div>
+          </form>
+        </div>
+      </div>
+    </section>
+
+    <!-- Detailed Footer -->
+    <footer class="verdant-glass mt-12 border-t border-white/10 py-12 px-6" id="footer">
+      <div class="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-4 gap-8 mb-12 text-left">
+        <div class="md:col-span-2">
+          <div class="font-display text-xl font-bold text-on-surface flex items-center gap-3 mb-4">
+            <img src="assets/favicon.png" alt="Logo"
+              class="h-8 w-auto rounded-full object-cover">
+            <span>Abdelmajid (Majdy) Abbassy</span>
+          </div>
+          <p class="text-xs text-on-surface-variant max-w-sm leading-relaxed mb-4">
+            Specialized in UI/UX Design, Brand Identity Systems, and Print/Digital Collateral. Open to remote roles and
+            international relocation.
+          </p>
+        </div>
+
+        <div>
+          <h4 class="font-display text-sm font-semibold text-on-surface mb-3">Quick Links</h4>
+          <ul class="space-y-2 text-xs text-on-surface-variant">
+            <li><a href="#about" class="hover:text-primary transition-colors">About</a></li>
+            <li><a href="#brands" class="hover:text-primary transition-colors">Brands</a></li>
+            <li><a href="#services" class="hover:text-primary transition-colors">Services</a></li>
+            <li><a href="#designs" class="hover:text-primary transition-colors">Design Gallery</a></li>
+            <li><a href="#packs" class="hover:text-primary transition-colors">Packages</a></li>
+            <li><a href="#experience" class="hover:text-primary transition-colors">Experience</a></li>
+            <li><a href="#contact-section" class="hover:text-primary transition-colors">Contact</a></li>
+          </ul>
+        </div>
+
+        <div>
+          <h4 class="font-display text-sm font-semibold text-on-surface mb-3">Connect</h4>
+          <ul class="space-y-2 text-xs text-on-surface-variant">
+            <li><a href="mailto:majdiabbassi222@gmail.com"
+                class="hover:text-primary transition-colors flex items-center gap-1.5"><span
+                  class="material-symbols-outlined text-xs">mail</span> majdiabbassi222@gmail.com</a></li>
+            <li><a href="tel:+21695223510" class="hover:text-primary transition-colors flex items-center gap-1.5"><span
+                  class="material-symbols-outlined text-xs">call</span> +216 95 223 510</a></li>
+            <li><a href="https://linkedin.com/in/abdelmajid-abbassi" target="_blank"
+                class="hover:text-primary transition-colors flex items-center gap-1.5"><span
+                  class="material-symbols-outlined text-xs">link</span> LinkedIn Profile</a></li>
+          </ul>
+        </div>
+      </div>
+
+      <div
+        class="max-w-6xl mx-auto pt-6 border-t border-white/5 flex flex-col sm:flex-row justify-between items-center text-xs text-on-surface-variant/60">
+        <p>© 2026 Abdelmajid Abbassy. All rights reserved.</p>
+        <p class="mt-2 sm:mt-0">Tunis, Tunisia • Open to Relocation</p>
+      </div>
+    </footer>
+  </main>
+
+  <!-- Scroll-driven sprite + enhanced animations -->
+  <script>
+    const canvas = document.getElementById('sprite-bg');
+    const ctx = canvas.getContext('2d');
+    const manifest = {
+      frameWidth: 640,
+      frameHeight: 360,
+      frameCount: 300,
+      cols: 15,
+      rows: 20
+    };
+
+    let spriteSheet = null;
+    let frameIndex = 0;
+    let targetFrame = 0;
+    let ticking = false;
+    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    function resizeCanvas() {
+      const dpr = Math.min(window.devicePixelRatio || 1, 2);
+      canvas.width  = Math.floor(window.innerWidth  * dpr);
+      canvas.height = Math.floor(window.innerHeight * dpr);
+      canvas.style.width  = `${window.innerWidth}px`;
+      canvas.style.height = `${window.innerHeight}px`;
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+      drawFrame(frameIndex);
+    }
+
+    function drawFrame(index) {
+      if (!spriteSheet) return;
+      const col    = index % manifest.cols;
+      const row    = Math.floor(index / manifest.cols);
+      const sx     = col * manifest.frameWidth;
+      const sy     = row * manifest.frameHeight;
+      const width  = canvas.clientWidth  || window.innerWidth;
+      const height = canvas.clientHeight || window.innerHeight;
+      ctx.clearRect(0, 0, width, height);
+      ctx.drawImage(spriteSheet, sx, sy, manifest.frameWidth, manifest.frameHeight, 0, 0, width, height);
+    }
+
+    function updateTargetFrame() {
+      const maxScroll = Math.max(1, document.documentElement.scrollHeight - window.innerHeight);
+      const scrollFraction = Math.min(1, Math.max(0, window.scrollY / maxScroll));
+      targetFrame = Math.round(scrollFraction * (manifest.frameCount - 1));
+    }
+
+    function onScroll() {
+      if (!ticking) {
+        window.requestAnimationFrame(() => {
+          updateTargetFrame();
+          ticking = false;
+        });
+        ticking = true;
+      }
+    }
+
+    // ============================================
+    // SECTION ↔ FRAME SYNC
+    // ============================================
+    function syncSectionsToFrame(frame) {
+      document.querySelectorAll('[data-frame-start]').forEach(section => {
+        const start = parseInt(section.dataset.frameStart, 10);
+        const end   = parseInt(section.dataset.frameEnd,   10);
+        if (frame >= start && frame <= end) {
+          section.classList.add('is-synced');
+        } else {
+          section.classList.remove('is-synced');
+        }
+      });
+    }
+
+    function animate() {
+      if (!prefersReducedMotion) {
+        const diff = targetFrame - frameIndex;
+        if (Math.abs(diff) > 0.02) {
+          frameIndex += diff * 0.08;
+        } else {
+          frameIndex = targetFrame;
+        }
+        const roundedFrame = Math.round(frameIndex);
+        drawFrame(roundedFrame);
+        syncSectionsToFrame(roundedFrame);
+      }
+      requestAnimationFrame(animate);
+    }
+
+    function loadSpriteSheet() {
+      const sources = ['assets/bg-sprite.webp', 'assets/bg-sprite.jpg'];
+      let currentIndex = 0;
+      function tryLoad() {
+        if (currentIndex >= sources.length) return;
+        const img = new Image();
+        img.decoding = 'async';
+        img.onload = () => {
+          spriteSheet = img;
+          resizeCanvas();
+          updateTargetFrame();
+          drawFrame(targetFrame);
+        };
+        img.onerror = () => { currentIndex += 1; tryLoad(); };
+        img.src = sources[currentIndex];
+      }
+      tryLoad();
+    }
+
+    window.addEventListener('scroll', onScroll, { passive: true });
+    window.addEventListener('resize', resizeCanvas);
+
+    // ============================================
+    // SECTION REVEAL — IntersectionObserver
+    // ============================================
+    const sectionObserver = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('revealed');
+          // Apply stagger delays to direct grid/stack children
+          entry.target.querySelectorAll(
+            '.grid > .verdant-glass, .space-y-6 > .verdant-glass, .space-y-4 > .verdant-glass'
+          ).forEach((card, i) => {
+            card.style.transitionDelay = `${0.06 + i * 0.13}s`;
+          });
+          sectionObserver.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.07, rootMargin: '-30px 0px' });
+
+    document.querySelectorAll('.section-reveal').forEach(s => sectionObserver.observe(s));
+
+    // ============================================
+    // 3D MOUSE TILT — GPU-accelerated rAF
+    // ============================================
+    function initButtonTilt() {
+      document.querySelectorAll('.btn-3d, .btn-3d-ghost').forEach(btn => {
+        let rafId  = null;
+        const isPri = btn.classList.contains('btn-3d');
+        const maxT  = isPri ? 10 : 7;
+        const maxZ  = isPri ? 14 : 7;
+
+        btn.addEventListener('mousemove', (e) => {
+          if (rafId) cancelAnimationFrame(rafId);
+          rafId = requestAnimationFrame(() => {
+            const rect = btn.getBoundingClientRect();
+            const cx   = rect.left + rect.width  / 2;
+            const cy   = rect.top  + rect.height / 2;
+            const dx   = (e.clientX - cx) / (rect.width  / 2);
+            const dy   = (e.clientY - cy) / (rect.height / 2);
+            const rX   = (-dy * maxT).toFixed(2);
+            const rY   = ( dx * maxT).toFixed(2);
+            btn.style.transform =
+              `perspective(700px) rotateX(${rX}deg) rotateY(${rY}deg) translateZ(${maxZ}px) translateY(-3px)`;
+          });
+        });
+
+        btn.addEventListener('mouseleave', () => {
+          if (rafId) cancelAnimationFrame(rafId);
+          btn.style.transform = '';
+        });
+
+        btn.addEventListener('mousedown', () => {
+          if (rafId) cancelAnimationFrame(rafId);
+          btn.style.transform = `perspective(700px) translateZ(3px) scale(0.97)`;
+        });
+
+        btn.addEventListener('mouseup', () => { btn.style.transform = ''; });
+      });
+    }
+    initButtonTilt();
+
+    // ============================================
+    // CONTACT FORM HANDLER
+    // ============================================
+    const contactForm = document.getElementById('contact-form');
+    const submitBtn   = document.getElementById('submit-btn');
+    const btnText     = submitBtn?.querySelector('.btn-text');
+    const btnIcon     = submitBtn?.querySelector('.btn-icon');
+    const btnLoader   = submitBtn?.querySelector('.btn-loader');
+    const formMessage = document.getElementById('form-message');
+
+    if (contactForm && submitBtn) {
+      const requiredInputs = contactForm.querySelectorAll('[required]');
+
+      function checkFormValidity() {
+        let allFilled = true;
+        requiredInputs.forEach(input => { if (!input.value.trim()) allFilled = false; });
+        submitBtn.disabled      = !allFilled;
+        submitBtn.style.opacity = allFilled ? '1' : '0.5';
+        submitBtn.style.cursor  = allFilled ? 'pointer' : 'not-allowed';
+      }
+
+      requiredInputs.forEach(input => input.addEventListener('input', checkFormValidity));
+      checkFormValidity();
+
+      contactForm.addEventListener('submit', async function(e) {
+        e.preventDefault();
+        const formData = new FormData(contactForm);
+        const data = {
+          name:    formData.get('name'),
+          email:   formData.get('email'),
+          package: formData.get('package'),
+          message: formData.get('message')
+        };
+
+        // Loading state
+        submitBtn.disabled      = true;
+        submitBtn.style.opacity = '0.7';
+        if (btnText)   btnText.textContent = 'Sending...';
+        if (btnIcon)   btnIcon.classList.add('hidden');
+        if (btnLoader) btnLoader.classList.remove('hidden');
+        if (formMessage) formMessage.classList.add('hidden');
+
+        try {
+          const response = await fetch('/.netlify/functions/contact', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(data)
+          });
+          const result = await response.json();
+
+          if (response.ok && result.success) {
+            if (formMessage) {
+              formMessage.textContent = "Message sent successfully! I'll get back to you soon.";
+              formMessage.className = 'block text-center px-4 py-2 rounded-xl text-green-400 bg-green-500/10 border border-green-500/20';
+            }
+            contactForm.reset();
+            checkFormValidity();
+          } else {
+            throw new Error(result.message || 'Failed to send message');
+          }
+        } catch (error) {
+          console.log('Form submission falling back to mailto link:', error);
+          const mailtoUri = `mailto:majdiabbassi222@gmail.com?subject=Portfolio Inquiry from ${encodeURIComponent(data.name)}&body=${encodeURIComponent('Name: ' + data.name + '\nEmail: ' + data.email + '\nPackage: ' + data.package + '\n\nMessage:\n' + data.message)}`;
+          window.location.href = mailtoUri;
+          if (formMessage) {
+            formMessage.textContent = 'Opening your email app to send message to majdiabbassi222@gmail.com...';
+            formMessage.className = 'block text-center px-4 py-2 rounded-xl text-primary bg-primary/10 border border-primary/20';
+          }
+        } finally {
+          submitBtn.disabled      = false;
+          submitBtn.style.opacity = '1';
+          if (btnText)   btnText.textContent = 'Send Message';
+          if (btnIcon)   btnIcon.classList.remove('hidden');
+          if (btnLoader) btnLoader.classList.add('hidden');
+          if (formMessage) formMessage.classList.remove('hidden');
+        }
+      });
+    }
+
+    // ============================================
+    // AMBIENT CUSTOM CURSOR & BUTTON SHINE SYSTEM
+    // ============================================
+    function initCustomCursorSystem() {
+      const dot  = document.getElementById('cursor-dot');
+      const ring = document.getElementById('cursor-ring');
+      const aura = document.getElementById('cursor-aura');
+      if (!dot || !ring || !aura) return;
+
+      let mouseX = window.innerWidth / 2;
+      let mouseY = window.innerHeight / 2;
+      let ringX  = mouseX;
+      let ringY  = mouseY;
+      let auraX  = mouseX;
+      let auraY  = mouseY;
+      let isVisible = false;
+
+      // Mouse position tracker
+      window.addEventListener('mousemove', (e) => {
+        mouseX = e.clientX;
+        mouseY = e.clientY;
+        if (!isVisible) {
+          isVisible = true;
+          document.body.classList.add('cursor-active');
+        }
+      }, { passive: true });
+
+      document.addEventListener('mouseleave', () => {
+        isVisible = false;
+        document.body.classList.remove('cursor-active');
+        document.body.classList.remove('cursor-hover');
+      });
+
+      // Smooth Frame Animation Loop (GPU Accelerated Lerp)
+      function renderCursorFrame() {
+        if (isVisible) {
+          // Instant tracking dot
+          dot.style.transform = `translate3d(${mouseX}px, ${mouseY}px, 0)`;
+
+          // Smooth lerp follower ring
+          ringX += (mouseX - ringX) * 0.18;
+          ringY += (mouseY - ringY) * 0.18;
+          ring.style.transform = `translate3d(${ringX.toFixed(2)}px, ${ringY.toFixed(2)}px, 0)`;
+
+          // Atmospheric background aura lerp
+          auraX += (mouseX - auraX) * 0.08;
+          auraY += (mouseY - auraY) * 0.08;
+          aura.style.transform = `translate3d(${auraX.toFixed(2)}px, ${auraY.toFixed(2)}px, 0)`;
+        }
+        requestAnimationFrame(renderCursorFrame);
+      }
+      renderCursorFrame();
+
+      // Attach hover glow state to all buttons, links, and cards
+      const attachHoverListeners = () => {
+        const interactables = document.querySelectorAll(
+          'a, button, input, select, textarea, .btn-3d, .btn-3d-ghost, .verdant-glass, .nav-link, .glass-badge'
+        );
+
+        interactables.forEach(el => {
+          el.addEventListener('mouseenter', () => document.body.classList.add('cursor-hover'));
+          el.addEventListener('mouseleave', () => document.body.classList.remove('cursor-hover'));
+        });
+
+        // Dynamic Spotlight Shine Tracker on buttons and glass cards
+        const shineElements = document.querySelectorAll('.btn-3d, .btn-3d-ghost, .verdant-glass');
+        shineElements.forEach(btn => {
+          let shine = btn.querySelector('.btn-shine-light');
+          if (!shine) {
+            shine = document.createElement('div');
+            shine.className = 'btn-shine-light';
+            btn.appendChild(shine);
+          }
+
+          btn.addEventListener('mousemove', (e) => {
+            const rect = btn.getBoundingClientRect();
+            const x = e.clientX - rect.left;
+            const y = e.clientY - rect.top;
+            btn.style.setProperty('--shine-x', `${x}px`);
+            btn.style.setProperty('--shine-y', `${y}px`);
+          });
+        });
+      };
+
+      attachHoverListeners();
+
+      // Click ripple scale feedback
+      window.addEventListener('mousedown', () => {
+        dot.style.transform += ' scale(0.6)';
+        ring.style.transform += ' scale(0.8)';
+      });
+    }
+
+    if (window.matchMedia('(pointer: fine)').matches) {
+      initCustomCursorSystem();
+    }
+
+    // ============================================
+    // PRELOADER LOADING ANIMATION SYSTEM
+    // ============================================
+    function initPreloader() {
+      const preloader = document.getElementById('preloader');
+      const bar       = document.getElementById('preloader-bar');
+      const percent   = document.getElementById('preloader-percent');
+      const status    = document.getElementById('preloader-status');
+      if (!preloader || !bar || !percent) return;
+
+      let currentProgress = 0;
+      let targetProgress  = 0;
+
+      const statuses = [
+        { threshold: 0,  text: "Initializing Visual Experience..." },
+        { threshold: 30, text: "Loading Brand Assets & Graphics..." },
+        { threshold: 70, text: "Rendering Atmospheric Canvas..." },
+        { threshold: 95, text: "Welcome to Archangel Portfolio" }
+      ];
+
+      function updateProgress(val) {
+        targetProgress = Math.min(100, Math.max(targetProgress, val));
+      }
+
+      // Smooth progress animation tick
+      const interval = setInterval(() => {
+        if (currentProgress < targetProgress) {
+          currentProgress += Math.max(1, Math.ceil((targetProgress - currentProgress) * 0.15));
+          if (currentProgress > 100) currentProgress = 100;
+
+          bar.style.width = `${currentProgress}%`;
+          percent.textContent = `${currentProgress}%`;
+
+          // Update status text based on threshold
+          for (let i = statuses.length - 1; i >= 0; i--) {
+            if (currentProgress >= statuses[i].threshold) {
+              if (status && status.textContent !== statuses[i].text) {
+                status.textContent = statuses[i].text;
+              }
+              break;
+            }
+          }
+        }
+
+        if (currentProgress >= 100) {
+          clearInterval(interval);
+          setTimeout(() => {
+            preloader.classList.add('preloader-hidden');
+            setTimeout(() => {
+              preloader.style.display = 'none';
+            }, 850);
+          }, 400);
+        }
+      }, 30);
+
+      // Initial progress steps
+      updateProgress(18);
+      setTimeout(() => updateProgress(50), 220);
+      setTimeout(() => updateProgress(80), 450);
+
+      // When page resources finish loading
+      window.addEventListener('load', () => {
+        updateProgress(100);
+      });
+
+      // Safety fallback (ensures preloader finishes in max 2.2 seconds)
+      setTimeout(() => {
+        updateProgress(100);
+      }, 2200);
+    }
+    initPreloader();
+
+    // ============================================
+    // INIT
+    // ============================================
+    loadSpriteSheet();
+    updateTargetFrame();
+    if (prefersReducedMotion) {
+      drawFrame(targetFrame);
+    } else {
+      animate();
+    }
+  </script>
+
+</body>
+</html>
